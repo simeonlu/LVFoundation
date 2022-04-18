@@ -18,20 +18,20 @@ import Foundation
 ///
 ///
 
-struct LocalizedString: ExpressibleByStringLiteral, Equatable {
+public struct LocalizedString: ExpressibleByStringLiteral, Equatable {
     
-    let value: String
+    public let value: String
     
-    init(key: String) {
+    public init(key: String) {
         self.value = NSLocalizedString(key, comment: key)
     }
     
-    init(stringLiteral value: String) {
+    public init(stringLiteral value: String) {
         self.init(key: value)
     }
 }
 
-func ==(lhs:LocalizedString, rhs:LocalizedString) -> Bool {
+public func ==(lhs:LocalizedString, rhs:LocalizedString) -> Bool {
     return lhs.value == rhs.value
 }
 
@@ -48,10 +48,10 @@ extension ExpressibleByExtendedGraphemeClusterLiteral where Self: ExpressibleByS
 }
 
 extension RawRepresentable where RawValue == LocalizedString {
-    var localizedString: String {
+    public var localizedString: String {
         return self.rawValue.value
     }
-    init?(localizedString: String) {
+    public init?(localizedString: String) {
         self.init(rawValue: LocalizedString(key: localizedString))
     }
 }

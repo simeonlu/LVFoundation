@@ -7,8 +7,8 @@
 //
 
 import Foundation
-enum Configuration {
-    enum Error: Swift.Error {
+public enum Configuration {
+    public enum Error: Swift.Error {
         case missingKey, invalidValue
     }
     
@@ -16,7 +16,7 @@ enum Configuration {
     /// - Parameter key: key of the value
     /// - Throws: Error
     /// - Returns: the value in plist or throws an error
-    static func value<T>(for key: String) throws -> T where T: LosslessStringConvertible {
+    public static func value<T>(for key: String) throws -> T where T: LosslessStringConvertible {
         guard let object = Bundle.main.object(forInfoDictionaryKey: key) else {
             throw Error.missingKey
         }

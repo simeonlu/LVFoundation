@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct EmailAddress: RawRepresentable, Codable {
-    let rawValue: String
+public struct EmailAddress: RawRepresentable, Codable {
+    public let rawValue: String
     
     /// Init function, could be failure.
     /// - Parameter rawValue: email string
-    init?(rawValue: String) {
+    public init?(rawValue: String) {
         let detector = try? NSDataDetector(
             types: NSTextCheckingResult.CheckingType.link.rawValue
         )

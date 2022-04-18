@@ -7,19 +7,19 @@
 import UIKit
 
 extension String {
-    var isNotEmpty: Bool {
+    public var isNotEmpty: Bool {
         !self.isEmpty
     }
 }
 
 // MARK: - Base64
 extension String {
-    func toBase64Image() -> UIImage? {
+    public func toBase64Image() -> UIImage? {
         guard let data = toBase64Data() else { return nil }
         return UIImage(data: data)
     }
     
-    func toBase64Data() -> Data? {
+    public func toBase64Data() -> Data? {
         Data(base64Encoded: self, options: .ignoreUnknownCharacters)
     }
 }

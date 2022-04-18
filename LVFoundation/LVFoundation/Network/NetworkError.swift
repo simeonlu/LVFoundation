@@ -6,14 +6,14 @@
 
 import Foundation
 
-enum NetworkError: LocalizedError {
+public enum NetworkError: LocalizedError {
     case timeout
     case forbidden
     case invalidPayload
     case unknown
 }
 
-extension NetworkError {
+public extension NetworkError {
     
     /// Map http status code to `NetworkError`
     /// - Parameter statusCode: code number to map

@@ -7,14 +7,14 @@
 import Foundation
 import Combine
 
-protocol Loadable {
+public protocol Loadable {
     associatedtype Model: Decodable
     func fetchModel<T: ModelTransformable>(
         for endpoint: Endpoint,
         transformer: T) -> AnyPublisher<Model, Error> where T.Model == Model
 }
 
-struct DataLoader<Model: Decodable>: Loadable {
+public struct DataLoader<Model: Decodable>: Loadable {
     
     private let session: URLSession = {
         let config = URLSessionConfiguration.default
@@ -28,7 +28,7 @@ struct DataLoader<Model: Decodable>: Loadable {
     ///   - endpoint: URL Endpoint
     ///   - transformer: transformer used to parse the data
     /// - Returns: `Model` Publisher
-    func fetchModel<T: ModelTransformable>(
+    public func fetchModel<T: ModelTransformable>(
         for endpoint: Endpoint,
         transformer: T) -> AnyPublisher<Model, Error> where T.Model == Model {
         let request = endpoint.makeRequest()
@@ -42,7 +42,7 @@ struct DataLoader<Model: Decodable>: Loadable {
             .eraseToAnyPublisher()
     }
     
-    func fetchModel<T: ModelTransformable>(
+    public func fetchModel<T: ModelTransformable>(
         for endpoint: Endpoint,
         transformer: T
     ) -> Future<Model, Error> where T.Model == Model {
@@ -68,7 +68,7 @@ struct DataLoader<Model: Decodable>: Loadable {
         }
     }
     
-    func fetchData(for endpoint: Endpoint) -> Future<(Data, URLResponse), Error> {
+    public func fetchData(for endpoint: Endpoint) -> Future<(Data, URLResponse), Error> {
         let request = endpoint.makeRequest()
         return Future<(Data, URLResponse), Error> { promise in
             let dataTask = session.dataTask(with: request) { data, response, error in
@@ -89,7 +89,7 @@ extension Publisher where Output == URLSession.DataTaskPublisher.Output {
     
     /// Filter out successful response, e.g. http status code is in between 200 to 299.
     /// - Returns: A new publisher, its `Output` is `DataTaskPublisher.Output`
-    func filterSuccessfulStatusCodes() -> Publishers.TryMap<Self, Output> {
+    public func filterSuccessfulStatusCodes() -> Publishers.TryMap<Self, Output> {
         tryMap { result in
             guard let response = result.response as? HTTPURLResponse else {
                 throw NetworkError.unknown

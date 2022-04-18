@@ -7,8 +7,8 @@
 import Foundation
 
 extension String {
-    static let empty = ""
-    static let doubleDash = "--"
-    static let dash = "-"
+    public static let empty = ""
+    public static let doubleDash = "--"
+    public static let dash = "-"
 }
 

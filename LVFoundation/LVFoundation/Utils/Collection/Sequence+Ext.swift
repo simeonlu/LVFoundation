@@ -8,7 +8,7 @@ import Foundation
 
 // find the 'M' smallest
 extension Sequence {
-    func smallest(_ m: Int, by isInAsecOrder: (Element, Element) -> Bool) -> [Element] {
+    public func smallest(_ m: Int, by isInAsecOrder: (Element, Element) -> Bool) -> [Element] {
       
         var result = prefix(m).sorted(by: isInAsecOrder)
         for item in dropFirst(m) {
@@ -23,16 +23,16 @@ extension Sequence {
 }
 
 extension Sequence where Element: Comparable {
-    func min(_ m: Int) -> [Element] {
+    public func min(_ m: Int) -> [Element] {
         smallest(m, by: <)
     }
-    func max(_ m: Int) -> [Element] {
+    public func max(_ m: Int) -> [Element] {
         smallest(m, by: >)
     }
 }
 
 extension Array where Element: Comparable {
-    func binarySearch(key: Element) -> Int? {
+    public func binarySearch(key: Element) -> Int? {
         var lower = startIndex
         var upper = endIndex
         

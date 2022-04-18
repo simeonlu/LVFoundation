@@ -6,7 +6,7 @@
 
 import Foundation
 
-enum HTTPMethod: String {
+public enum HTTPMethod: String {
     case get    = "GET"
     case post   = "POST"
     case put    = "PUT"
@@ -14,12 +14,12 @@ enum HTTPMethod: String {
     case patch  = "PATCH"
 }
 
-enum HTTPScheme: String {
+public enum HTTPScheme: String {
     case http
     case https
 }
 
-protocol Endpoint {
+public protocol Endpoint {
     var scheme: HTTPScheme { get }
     
     var host: String { get }
@@ -31,7 +31,7 @@ protocol Endpoint {
     var method: HTTPMethod { get }
 }
 
-extension Endpoint {
+public extension Endpoint {
     var url: URL {
         var components = URLComponents()
         components.scheme = scheme.rawValue
@@ -53,16 +53,16 @@ extension Endpoint {
     }
 }
 
-struct APIEndpoint: Endpoint {
+public struct APIEndpoint: Endpoint {
    
-    let host: String
+    public let host: String
     
-    let path: String
+    public let path: String
     
-    var scheme: HTTPScheme = .https
+    public var scheme: HTTPScheme = .https
     
-    var parameters: [URLQueryItem] = []
+    public var parameters: [URLQueryItem] = []
     
-    var method: HTTPMethod = .get
+    public var method: HTTPMethod = .get
 }
 
