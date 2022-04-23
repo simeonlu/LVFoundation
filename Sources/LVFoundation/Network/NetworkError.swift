@@ -6,11 +6,11 @@
 
 import Foundation
 
-public enum NetworkError: LocalizedError {
+public enum NetworkError: LocalizedError, Equatable {
     case timeout
     case forbidden
     case invalidPayload
-    case decode(Error)
+    case decode(description: String)
     case unknown
 }
 
