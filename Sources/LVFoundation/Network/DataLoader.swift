@@ -9,7 +9,7 @@ import Combine
 
 public protocol Loadable {
     associatedtype Model: Decodable
-    func fetchModel<T: ModelTransformable>(
+    func fetchModel<T: ModelTransforming>(
         for endpoint: Endpoint,
         transformer: T) -> AnyPublisher<Model, Error> where T.Model == Model
 }
@@ -28,7 +28,7 @@ public struct DataLoader<Model: Decodable>: Loadable {
     ///   - endpoint: URL Endpoint
     ///   - transformer: transformer used to parse the data
     /// - Returns: `Model` Publisher
-    public func fetchModel<T: ModelTransformable>(
+    public func fetchModel<T: ModelTransforming>(
         for endpoint: Endpoint,
         transformer: T) -> AnyPublisher<Model, Error> where T.Model == Model {
         let request = endpoint.makeRequest()
@@ -42,7 +42,7 @@ public struct DataLoader<Model: Decodable>: Loadable {
             .eraseToAnyPublisher()
     }
     
-    public func fetchModel<T: ModelTransformable>(
+    public func fetchModel<T: ModelTransforming>(
         for endpoint: Endpoint,
         transformer: T
     ) -> Future<Model, Error> where T.Model == Model {
