@@ -32,7 +32,6 @@ extension UIImage {
         var resizingImage = self
         let kBUnit = 1024.0
         var imageSizeKB = Double(imageData.count) / kBUnit
-        dLog("original image size: \(imageSizeKB)KB")
         while imageSizeKB > Double(mgb) * kBUnit {
             guard let resizedImage = resizingImage.resized(withPercentage: 0.8),
                 let imageData = resizedImage.pngData()
@@ -40,7 +39,6 @@ extension UIImage {
 
             resizingImage = resizedImage
             imageSizeKB = Double(imageData.count) / kBUnit
-            dLog("reduce image size to: \(imageSizeKB)KB")
         }
 
         return resizingImage

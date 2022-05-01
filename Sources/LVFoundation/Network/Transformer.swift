@@ -14,12 +14,20 @@ public protocol ModelTransforming {
 }
 
 public struct JsonModelTransformer<Model: Decodable>: ModelTransforming {
-    public init() {}
-    public var transform: Transforming = { (data, _) in
-        do {
-            return try JSONDecoder().decode(Model.self, from: data)
-        } catch(let error) {
-            throw NetworkError.decode(description: error.localizedDescription)
+    private let dateStrategy: JSONDecoder.DateDecodingStrategy
+    public init(dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .iso8601) {
+        self.dateStrategy = dateDecodingStrategy
+    }
+    public var transform: Transforming {
+        { (data, _) in
+            do {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = self.dateStrategy
+                return try decoder.decode(Model.self, from: data)
+            } catch(let error) {
+                throw NetworkError.decode(description: error.localizedDescription)
+            }
         }
+        
     }
 }
