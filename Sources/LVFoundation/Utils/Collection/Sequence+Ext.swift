@@ -31,6 +31,7 @@ extension Sequence where Element: Comparable {
     }
 }
 
+// MARK: - Array extension
 extension Array where Element: Comparable {
     public func binarySearch(key: Element) -> Int? {
         var lower = startIndex
@@ -48,4 +49,42 @@ extension Array where Element: Comparable {
         }
         return nil
     }
+}
+
+extension Array where Element: Equatable {
+
+    /// Remove one item from an Array
+    ///
+    /// - Parameter item: item to be removed
+    public mutating func removeItem(_ item: Element) {
+        if let index = self.firstIndex(of: item) {
+            self.remove(at: index)
+        }
+    }
+}
+
+// MARK: - Dictionary
+extension Dictionary {
+
+    /// concat two dictionary into one dictionary
+    ///
+    /// - Parameter dictionary: dictionary to be concat
+    public mutating func concat(_ dictionary: Dictionary) {
+        dictionary.forEach { self.updateValue($1, forKey: $0) }
+    }
+
+    /// Apply Transform on each items in dictionary
+    ///
+    /// - Parameter transform: transform closure
+    /// - Returns: new dictionary with item transformed
+    /// - Throws: Throw error if error occurred.
+    public func map<T: Hashable, U>(transform: (Key, Value) throws -> (T, U)) rethrows -> [T: U] {
+        var result: [T: U] = [:]
+        for (key, value) in self {
+            let (transformedKey, transformedValue) = try transform(key, value)
+            result[transformedKey] = transformedValue
+        }
+        return result
+    }
+
 }

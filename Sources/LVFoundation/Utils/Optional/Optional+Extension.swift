@@ -54,3 +54,14 @@ extension Optional {
         return unwrapped
     }
 }
+extension Optional {
+    /// Executes the closure `some` if and only if the optional has a value
+    public func on(some: () throws -> Void) rethrows {
+        if self != nil { try some() }
+    }
+
+    /// Executes the closure `none` if and only if the optional has no value
+    public func on(none: () throws -> Void) rethrows {
+        if self == nil { try none() }
+    }
+}
