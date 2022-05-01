@@ -31,4 +31,12 @@ public enum Configuration {
             throw Error.invalidValue
         }
     }
+    
+    static var versionNumber: String {
+        return (try? value(for: "CFBundleShortVersionString")) ?? "--"
+    }
+    
+    static var buildNumber: String {
+        return (try? value(for: "CFBundleVersion")) ?? "--"
+    }
 }
