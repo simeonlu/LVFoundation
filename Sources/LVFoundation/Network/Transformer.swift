@@ -7,13 +7,13 @@
 import Foundation
 
 /// Protocol that defines how to transform raw data to data model.
-public protocol ModelTransforming {
+public protocol ResponseTransforming {
     associatedtype Model: Decodable
     typealias Transforming = (Data, URLResponse) throws -> Model
     var transform: Transforming { get }
 }
 
-public struct JsonModelTransformer<Model: Decodable>: ModelTransforming {
+public struct JsonModelTransformer<Model: Decodable>: ResponseTransforming {
     private let dateStrategy: JSONDecoder.DateDecodingStrategy
     public init(dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .iso8601) {
         self.dateStrategy = dateDecodingStrategy
@@ -28,6 +28,5 @@ public struct JsonModelTransformer<Model: Decodable>: ModelTransforming {
                 throw NetworkError.decode(description: error.localizedDescription)
             }
         }
-        
     }
 }
