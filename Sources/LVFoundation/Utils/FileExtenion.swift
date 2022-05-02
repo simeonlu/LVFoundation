@@ -7,9 +7,8 @@
 
 import Foundation
 
-func loadFile(fileName: String, fileType: String = "json") -> Data? {
+func loadFile(bundle: Bundle, fileName: String, fileType: String = "json") -> Data? {
     
-    let bundle = Bundle(for: type(of: self))
     let filePath = bundle.path(forResource: fileName, ofType: fileType)
     
     guard let path = filePath else { return nil }
