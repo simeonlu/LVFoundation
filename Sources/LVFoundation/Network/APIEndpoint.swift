@@ -54,15 +54,29 @@ public extension Endpoint {
 }
 
 public struct APIEndpoint: Endpoint {
-   
+    
     public let host: String
     
     public let path: String
     
-    public var scheme: HTTPScheme = .https
+    public let scheme: HTTPScheme
     
-    public var parameters: [URLQueryItem] = []
+    public let method: HTTPMethod
     
-    public var method: HTTPMethod = .get
+    public var parameters: [URLQueryItem]
+    
+    public init(
+        host: String,
+        path: String,
+        scheme: HTTPScheme = .https,
+        parameters: [URLQueryItem] = [],
+        method: HTTPMethod = .get
+    ) {
+        self.host = host
+        self.path = path
+        self.scheme = scheme
+        self.parameters = parameters
+        self.method = method
+    }
 }
 
