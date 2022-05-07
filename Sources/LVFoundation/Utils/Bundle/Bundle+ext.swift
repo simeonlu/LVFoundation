@@ -32,11 +32,11 @@ public enum Configuration {
         }
     }
     
-    static var versionNumber: String {
+    public static var versionNumber: String {
         return (try? value(for: "CFBundleShortVersionString")) ?? "--"
     }
     
-    static var buildNumber: String {
+    public static var buildNumber: String {
         return (try? value(for: "CFBundleVersion")) ?? "--"
     }
 }
