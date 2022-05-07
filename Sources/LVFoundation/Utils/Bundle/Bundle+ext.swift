@@ -16,8 +16,8 @@ public enum Configuration {
     /// - Parameter key: key of the value
     /// - Throws: Error
     /// - Returns: the value in plist or throws an error
-    public static func value<T>(for key: String) throws -> T where T: LosslessStringConvertible {
-        guard let object = Bundle.main.object(forInfoDictionaryKey: key) else {
+    public static func value<T>(for key: String, in bundle: Bundle = .main) throws -> T where T: LosslessStringConvertible {
+        guard let object = bundle.object(forInfoDictionaryKey: key) else {
             throw Error.missingKey
         }
 
