@@ -67,7 +67,7 @@ class DataLoaderTest: XCTestCase {
                     XCTFail("Expected a NetworkError")
                     return
                 }
-                XCTAssertEqual(networkErr, NetworkError.unknown)
+                XCTAssertEqual(networkErr, NetworkError.httpError)
                 expect.fulfill()
                 
             }, receiveValue: { _ in })

@@ -8,13 +8,19 @@ import Foundation
 import Combine
 
 public protocol Loadable {
-    associatedtype Model: Decodable
-    func fetchModel<T: ResponseTransformable>(
+    func fetchResource<T: ResponseTransformable>(
         for endpoint: Endpoint,
-        transformer: T) -> AnyPublisher<Model, Error> where T.Model == Model
+        transformer: T) -> AnyPublisher<T.Model, Error>
+    
+    @available(iOS 15.0, macCatalyst 15.0, *)
+    func fetchResource<T: ResponseTransformable>(
+        for endpoint: Endpoint,
+        transformer: T) async throws -> T.Model
 }
 
-public struct DataLoader<Model: Decodable>: Loadable {
+public struct DataLoader: Loadable {
+    
+    public init() {}
     
     private let session: URLSession = {
         let config = URLSessionConfiguration.default
@@ -28,35 +34,48 @@ public struct DataLoader<Model: Decodable>: Loadable {
     ///   - endpoint: URL Endpoint
     ///   - transformer: transformer used to parse the data
     /// - Returns: `Model` Publisher
-    public func fetchModel<T: ResponseTransformable>(
+    public func fetchResource<T: ResponseTransformable>(
         for endpoint: Endpoint,
-        transformer: T) -> AnyPublisher<Model, Error> where T.Model == Model {
-        let request = endpoint.makeRequest()
-        return
-            session
-            .dataTaskPublisher(for: request)
-            .mapError(NetworkError.map)
-            .filterSuccessfulStatusCodes()
-            .tryMap(transformer.transform)
-            .print()
-            .eraseToAnyPublisher()
-    }
+        transformer: T) -> AnyPublisher<T.Model, Error> {
+            let request = endpoint.makeRequest()
+            return session
+                .dataTaskPublisher(for: request)
+                .mapError(NetworkError.map)
+                .filterSuccessfulStatusCodes()
+                .tryMap(transformer.transform)
+                .print()
+                .eraseToAnyPublisher()
+        }
     
-    public func fetchModel<T: ResponseTransformable>(
+    @available(iOS 15.0, macCatalyst 15.0, *)
+    public func fetchResource<T: ResponseTransformable>(
+        for endpoint: Endpoint,
+        transformer: T) async throws -> T.Model {
+            let request = endpoint.makeRequest()
+            
+            let result: (data: Data, response: URLResponse) = try await session.data(for: request)
+            let resp = try result.response.filterSuccessfulHttpStatusCodes()
+            return try transformer.transform(result.data, resp)
+        }
+    
+    public func fetchResource<T: ResponseTransformable>(
         for endpoint: Endpoint,
         transformer: T
-    ) -> Future<Model, Error> where T.Model == Model {
+    ) -> Future<T.Model, Error> {
         let request = endpoint.makeRequest()
-        return Future<Model, Error> { promise in
+        return Future<T.Model, Error> { promise in
             let dataTask = session.dataTask(with: request) { data, response, error in
                 if let error = error {
                     promise(.failure(error))
                 }
+               
                 guard let resp = response, let data = data else {
                     promise(.failure(NetworkError.invalidPayload))
                     return
                 }
+                
                 do {
+                    _ = try resp.filterSuccessfulHttpStatusCodes()
                     let result = try transformer.transform(data, resp)
                     promise(.success(result))
                 } catch (let error) {
@@ -91,15 +110,22 @@ extension Publisher where Output == URLSession.DataTaskPublisher.Output {
     /// - Returns: A new publisher, its `Output` is `DataTaskPublisher.Output`
     public func filterSuccessfulStatusCodes() -> Publishers.TryMap<Self, Output> {
         tryMap { result in
-            guard let response = result.response as? HTTPURLResponse else {
-                throw NetworkError.unknown
-            }
-            guard (200...299).contains(response.statusCode) else {
-                throw NetworkError.map(response.statusCode)
-            }
+            try _ = result.response.filterSuccessfulHttpStatusCodes()
             return result
         }
-        
     }
+}
+
+extension URLResponse {
     
+    @discardableResult
+    func filterSuccessfulHttpStatusCodes() throws -> HTTPURLResponse {
+        guard let response = self as? HTTPURLResponse else {
+            throw NetworkError.httpError
+        }
+        guard (200...299).contains(response.statusCode) else {
+            throw NetworkError.map(response.statusCode)
+        }
+        return response
+    }
 }

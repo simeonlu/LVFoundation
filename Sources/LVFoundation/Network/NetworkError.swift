@@ -10,6 +10,8 @@ public enum NetworkError: LocalizedError, Equatable {
     case timeout
     case forbidden
     case invalidPayload
+    case serverError
+    case httpError
     case decode(description: String)
     case unknown
 }
