@@ -7,13 +7,13 @@
 
 import Foundation
 
-protocol CurrencyType {
+public protocol CurrencyType {
     static var code: String { get }
     static var symbol: String { get }
     static var name: String { get }
 }
 
-struct Money<C: CurrencyType>: Equatable {
+public struct Money<C: CurrencyType>: Equatable {
     typealias Currency = C
     var amount: Decimal
     
@@ -22,18 +22,18 @@ struct Money<C: CurrencyType>: Equatable {
     }
 
     var currency: CurrencyType {
-        return Currency.self as! CurrencyType
+        return Currency.self as! C
     }
 }
 
 extension Money: Comparable {
-    static func < (lhs: Money<C>, rhs: Money<C>) -> Bool {
+    public static func < (lhs: Money<C>, rhs: Money<C>) -> Bool {
         lhs.amount < rhs.amount
     }
 }
 
 extension Money: ExpressibleByIntegerLiteral {
-    init(integerLiteral value: Int) {
+    public init(integerLiteral value: Int) {
         self.init(Decimal(value))
     }
 }
@@ -44,7 +44,7 @@ extension Money: ExpressibleByFloatLiteral {
     }
 }
 
-extension Money {
+public extension Money {
     static func + (lhs: Money<C>, rhs: Money<C>) -> Self {
         return Money<C>(lhs.amount + rhs.amount)
     }
@@ -68,7 +68,7 @@ extension Money {
         return lhs.amount *= rhs
     }
 
-    public static prefix func - (value: Money<C>) -> Money<C> {
+    static prefix func - (value: Money<C>) -> Money<C> {
         return Money<C>(-value.amount)
     }
 
@@ -82,18 +82,18 @@ protocol UnidirectionalCurrencyConverter {
 }
 
 extension UnidirectionalCurrencyConverter {
-    func convert(_ value: Money<Fixed>) -> Money<Variable> {
+   public func convert(_ value: Money<Fixed>) -> Money<Variable> {
         return Money<Variable>(value.amount * rate) }
 }
 
 protocol BidirectionalCurrencyConverter: UnidirectionalCurrencyConverter {}
 
 extension BidirectionalCurrencyConverter {
-    func convert(_ value: Money<Variable>) -> Money<Fixed> {
+    public func convert(_ value: Money<Variable>) -> Money<Fixed> {
         return Money<Fixed>(value.amount / rate) }
 }
 
-struct CurrencyPair<Fixed: CurrencyType, Variable: CurrencyType>: BidirectionalCurrencyConverter {
+public struct CurrencyPair<Fixed: CurrencyType, Variable: CurrencyType>: BidirectionalCurrencyConverter {
     
     var rate: Decimal
     init(rate: Decimal) {

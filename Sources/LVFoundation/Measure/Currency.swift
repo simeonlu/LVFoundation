@@ -7,90 +7,90 @@
 
 import Foundation
 
-enum USD: CurrencyType {
-    static var code: String {
+public enum USD: CurrencyType {
+    public static var code: String {
         return "USD"
 
     }
-    static var symbol: String {
+    public static var symbol: String {
         return "$"
 
     }
-    static var name: String {
+    public static var name: String {
         return "US dollar"
 
     }
 }
 
-enum CNY: CurrencyType {
-    static var code: String {
+public enum CNY: CurrencyType {
+    public static var code: String {
         return "CNY"
 
     }
-    static var symbol: String {
+    public static var symbol: String {
         return "¥"
 
     }
-    static var name: String {
+    public static var name: String {
         return "Chinese Yuan Renminbi"
 
     }
 }
 
-enum EUR: CurrencyType {
-    static var code: String {
+public enum EUR: CurrencyType {
+    public static var code: String {
         return "EUR"
 
     }
-    static var symbol: String {
+    public static var symbol: String {
         return "€"
 
     }
-    static var name: String {
+    public static var name: String {
         return "Euro"
 
     }
 }
-enum HKD: CurrencyType {
-    static var code: String {
+public enum HKD: CurrencyType {
+    public static var code: String {
         return "HKD"
 
     }
-    static var symbol: String {
+    public static var symbol: String {
         return "HK$"
 
     }
-    static var name: String {
+    public static var name: String {
         return "Hong Kong Dollar"
 
     }
 }
 
-enum GBP: CurrencyType {
-    static var code: String {
+public enum GBP: CurrencyType {
+    public static var code: String {
         return "GBP"
 
     }
-    static var symbol: String {
+    public static var symbol: String {
         return "£"
 
     }
-    static var name: String {
+    public static var name: String {
         return "British Pound"
 
     }
 }
 
-enum JPY: CurrencyType {
-    static var code: String {
+public enum JPY: CurrencyType {
+    public static var code: String {
         return "JPY"
 
     }
-    static var symbol: String {
+    public static var symbol: String {
         return "¥"
 
     }
-    static var name: String {
+    public static var name: String {
         return "Japanese Yen"
 
     }
