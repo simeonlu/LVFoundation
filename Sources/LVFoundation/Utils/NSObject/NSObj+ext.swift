@@ -8,11 +8,11 @@
 import Foundation
 
 extension NSObject {
-    var className: String {
+   public var className: String {
         return String(describing: type(of: self))
     }
     
-    class var className: String {
+    public class var className: String {
         return String(describing: self)
     }
 }

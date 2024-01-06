@@ -7,7 +7,7 @@
 
 import Foundation
 
-func loadFile(bundle: Bundle, fileName: String, fileType: String = "json") -> Data? {
+public func loadFile(bundle: Bundle, fileName: String, fileType: String = "json") -> Data? {
     
     let filePath = bundle.path(forResource: fileName, ofType: fileType)
     
